@@ -30,11 +30,15 @@ for episode in range(100000):
         observation = env.reset()
 state = int(toINT(env.reset()))
 done = False
+win = 0
 for episode in range(NUM_EPISODES):
     action = np.argmax(Q[state, :])
     next_state, reward, done, truncated = env.step(action)
+    if reward > 0:
+        win += 1
     state = int(toINT(next_state))
     if done or truncated:
         observation = env.reset()
     env.render()
+print(win)
 env.close()
