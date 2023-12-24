@@ -1,5 +1,6 @@
 import gym
 import gym_maze
+import numpy as np
 
 def toINT(L):
     return L[0] * 10 + L[1]
@@ -8,6 +9,7 @@ env = gym.make("maze-random-10x10-plus-v0")
 observation = env.reset()
 state = int(toINT(observation))
 Q = np.zeros((100, 4))
+
 NUM_EPISODES = 1000
 alpha = 0.1
 gamma = 0.9
@@ -26,10 +28,13 @@ for episode in range(100000):
 
     if done or truncated:
         observation = env.reset()
-
+state = int(toINT(env.reset()))
+done = False
 for episode in range(NUM_EPISODES):
-    action = env.action_space.sample()
+    action = np.argmax(Q[state, :])
     next_state, reward, done, truncated = env.step(action)
+    state = int(toINT(next_state))
     if done or truncated:
         observation = env.reset()
+    env.render()
 env.close()
